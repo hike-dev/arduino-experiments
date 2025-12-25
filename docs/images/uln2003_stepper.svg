@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="520" viewBox="0 0 980 520">
+  <style>
+    .box { fill: #f8fafc; stroke: #0f172a; stroke-width: 2; }
+    .title { font: 700 18px system-ui, -apple-system, Segoe UI, Roboto, Arial; fill: #0f172a; }
+    .text { font: 14px system-ui, -apple-system, Segoe UI, Roboto, Arial; fill: #0f172a; }
+    .wire { stroke: #334155; stroke-width: 3; fill: none; }
+    .wire2 { stroke: #16a34a; stroke-width: 3; fill: none; }
+    .note { font: 12px system-ui, -apple-system, Segoe UI, Roboto, Arial; fill: #334155; }
+  </style>
+
+  <rect width="100%" height="100%" fill="#ffffff"/>
+
+  <rect class="box" x="40" y="70" width="260" height="340" rx="14"/>
+  <text class="title" x="70" y="105">Arduino Uno</text>
+  <text class="text" x="70" y="150">D8  → IN1</text>
+  <text class="text" x="70" y="180">D10 → IN2</text>
+  <text class="text" x="70" y="210">D9  → IN3</text>
+  <text class="text" x="70" y="240">D11 → IN4</text>
+  <text class="text" x="70" y="290">5V → VCC</text>
+  <text class="text" x="70" y="320">GND → GND</text>
+
+  <rect class="box" x="380" y="70" width="260" height="340" rx="14"/>
+  <text class="title" x="410" y="105">ULN2003</text>
+  <text class="text" x="410" y="150">IN1</text>
+  <text class="text" x="410" y="180">IN2</text>
+  <text class="text" x="410" y="210">IN3</text>
+  <text class="text" x="410" y="240">IN4</text>
+  <text class="text" x="410" y="290">VCC (5V)</text>
+  <text class="text" x="410" y="320">GND</text>
+  <text class="text" x="410" y="365">Motor connector</text>
+
+  <rect class="box" x="720" y="170" width="220" height="160" rx="14"/>
+  <text class="title" x="740" y="205">28BYJ-48</text>
+  <text class="text" x="740" y="240">Шаговый мотор</text>
+  <text class="text" x="740" y="270">в разъём ULN2003</text>
+
+  <!-- Signal wires -->
+  <path class="wire" d="M 300 143 C 330 143, 350 143, 380 143"/>
+  <path class="wire" d="M 300 173 C 330 173, 350 173, 380 173"/>
+  <path class="wire" d="M 300 203 C 330 203, 350 203, 380 203"/>
+  <path class="wire" d="M 300 233 C 330 233, 350 233, 380 233"/>
+
+  <text class="note" x="310" y="137">D8</text>
+  <text class="note" x="310" y="167">D10</text>
+  <text class="note" x="310" y="197">D9</text>
+  <text class="note" x="310" y="227">D11</text>
+
+  <!-- Power -->
+  <path class="wire2" d="M 300 283 C 330 283, 350 283, 380 283"/>
+  <path class="wire" d="M 300 313 C 330 313, 350 313, 380 313"/>
+  <text class="note" x="310" y="277">5V</text>
+  <text class="note" x="310" y="307">GND</text>
+
+  <!-- Motor connector -->
+  <path class="wire" d="M 640 370 C 680 370, 700 250, 720 250"/>
+  <text class="note" x="650" y="365">кабель мотора</text>
+</svg>

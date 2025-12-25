@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="520" viewBox="0 0 980 520">
+  <style>
+    .box { fill: #f8fafc; stroke: #0f172a; stroke-width: 2; }
+    .title { font: 700 18px system-ui, -apple-system, Segoe UI, Roboto, Arial; fill: #0f172a; }
+    .text { font: 14px system-ui, -apple-system, Segoe UI, Roboto, Arial; fill: #0f172a; }
+    .wire { stroke: #334155; stroke-width: 3; fill: none; }
+    .wire2 { stroke: #7c3aed; stroke-width: 3; fill: none; }
+    .wire3 { stroke: #16a34a; stroke-width: 3; fill: none; }
+    .note { font: 12px system-ui, -apple-system, Segoe UI, Roboto, Arial; fill: #334155; }
+  </style>
+
+  <rect width="100%" height="100%" fill="#ffffff"/>
+
+  <rect class="box" x="40" y="60" width="260" height="320" rx="14"/>
+  <text class="title" x="70" y="95">Arduino Uno</text>
+  <text class="text" x="70" y="135">D5 (ENA PWM)</text>
+  <text class="text" x="70" y="165">D8 (IN1)</text>
+  <text class="text" x="70" y="195">D7 (IN2)</text>
+  <text class="text" x="70" y="240">5V (logic)</text>
+  <text class="text" x="70" y="270">GND</text>
+
+  <rect class="box" x="380" y="60" width="260" height="320" rx="14"/>
+  <text class="title" x="410" y="95">L293D</text>
+  <text class="text" x="410" y="135">ENA</text>
+  <text class="text" x="410" y="165">IN1</text>
+  <text class="text" x="410" y="195">IN2</text>
+  <text class="text" x="410" y="240">Vcc1 (logic)</text>
+  <text class="text" x="410" y="270">GND</text>
+  <text class="text" x="410" y="310">Vmotor (+9V)</text>
+  <text class="text" x="410" y="340">OUT1 / OUT2 → мотор</text>
+
+  <rect class="box" x="720" y="80" width="220" height="120" rx="14"/>
+  <text class="title" x="740" y="115">DC Motor</text>
+  <text class="text" x="740" y="150">2 провода</text>
+
+  <rect class="box" x="720" y="250" width="220" height="130" rx="14"/>
+  <text class="title" x="740" y="285">Питание</text>
+  <text class="text" x="740" y="320">Адаптер 9V</text>
+  <text class="text" x="740" y="350">+9V и GND</text>
+
+  <!-- Wires from UNO to L293D -->
+  <path class="wire" d="M 300 128 C 330 128, 350 128, 380 128"/>
+  <path class="wire" d="M 300 158 C 330 158, 350 158, 380 158"/>
+  <path class="wire" d="M 300 188 C 330 188, 350 188, 380 188"/>
+
+  <text class="note" x="310" y="122">D5 → ENA</text>
+  <text class="note" x="310" y="152">D8 → IN1</text>
+  <text class="note" x="310" y="182">D7 → IN2</text>
+
+  <!-- 5V logic -->
+  <path class="wire3" d="M 300 232 C 330 232, 350 232, 380 232"/>
+  <text class="note" x="310" y="226">5V → Vcc1</text>
+
+  <!-- GND common -->
+  <path class="wire" d="M 300 262 C 330 262, 350 262, 380 262"/>
+  <path class="wire" d="M 640 262 C 690 262, 700 305, 720 305"/>
+  <text class="note" x="310" y="256">GND общий</text>
+
+  <!-- Motor wires -->
+  <path class="wire2" d="M 640 330 C 680 330, 700 130, 720 130"/>
+  <path class="wire2" d="M 640 350 C 685 350, 700 160, 720 160"/>
+  <text class="note" x="650" y="325">OUT1</text>
+  <text class="note" x="650" y="345">OUT2</text>
+
+  <!-- 9V to Vmotor and GND -->
+  <path class="wire2" d="M 720 330 C 690 330, 680 315, 640 315"/>
+  <text class="note" x="650" y="309">+9V → Vmotor</text>
+  <text class="note" x="740" y="400">Важно: GND питания соединить с GND Arduino</text>
+</svg>
