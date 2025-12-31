@@ -8,6 +8,10 @@
 
 ## Подключение
 
+## Иллюстрация (как на макетке)
+
+![Breadboard wiring](../../docs/images/breadboard/uno_hcsr04.svg)
+
 - VCC → 5V
 - GND → GND
 - TRIG → D7

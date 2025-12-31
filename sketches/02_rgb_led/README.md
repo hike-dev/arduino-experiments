@@ -8,6 +8,10 @@
 
 ## Подключение
 
+## Иллюстрация (как на макетке)
+
+![Breadboard wiring](../../docs/images/breadboard/uno_rgb_led.svg)
+
 - R → D11 через резистор
 - G → D10 через резистор
 - B → D9 через резистор

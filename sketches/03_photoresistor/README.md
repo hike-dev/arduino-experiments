@@ -8,6 +8,10 @@
 
 ## Подключение (делитель напряжения)
 
+## Иллюстрация (как на макетке)
+
+![Breadboard wiring](../../docs/images/breadboard/uno_photoresistor.svg)
+
 - 5V → LDR → (точка) → A0
 - Из точки → резистор 10k → GND
 
@@ -31,3 +35,12 @@ flowchart LR
 
 - Залить: `pio run -t upload -e uno-photoresistor`
 - Монитор: `pio device monitor -b 115200`
+
+### Как понять, что всё работает
+
+- В Serial Monitor значение `LDR raw: ...` должно заметно меняться, если подсвечивать LDR или закрывать его рукой.
+- Встроенный светодиод Arduino (`LED_BUILTIN`) служит явной индикацией:
+  - в темноте он загорается
+  - на свету гаснет
+
+Если LED переключается “не там”, подстрой порог в `kDarkThresholdRaw` в `src/main.cpp`.

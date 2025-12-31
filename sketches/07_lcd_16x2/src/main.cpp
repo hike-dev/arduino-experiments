@@ -2,44 +2,53 @@
   LCD 16x2 (uno-lcd-16x2)
 
   Что нужно из набора:
-    - LCD 16x2 (параллельный)
-    - Потенциометр (для контраста)
-    - Jumper Wires + макетная плата
+    - LCD 16x2 + I2C-платка ("backpack", 4 пина: GND/VCC/SDA/SCL)
+    - Провода + макетная плата
 
-  Подключение (сигнальные пины как в коде ниже):
-    LCD RS -> D12
-    LCD E  -> D11
-    LCD D4 -> D5
-    LCD D5 -> D4
-    LCD D6 -> D3
-    LCD D7 -> D2
+  Подключение (I2C, 4 провода):
+    LCD GND -> GND
+    LCD VCC -> 5V
+    LCD SDA -> A4 (SDA)
+    LCD SCL -> A5 (SCL)
 
-  Контраст (самое важное, иначе экран может быть пустой):
-    Pot end 1  -> 5V
-    Pot end 2  -> GND
-    Pot middle -> LCD V0/VO
+  Контраст:
+    - Обычно регулируется маленьким подстроечником на I2C-платке.
 
-  Дополнительно для этого скетча:
-    - Можно соединить Pot middle ещё и с A0, чтобы на экране показывалось значение.
+  Дополнительно (не обязательно):
+    - Можно подключить потенциометр к A0 (wiper -> A0, края -> 5V/GND),
+      тогда на экране будет показываться значение A0.
 
   Что увидишь:
     - На первой строке "LCD ready", на второй строке "Pot: <число>".
 */
 
 #include <Arduino.h>
-#include <LiquidCrystal.h>
+#include <Wire.h>
 
-// RS, E, D4, D5, D6, D7
-LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
-constexpr uint8_t kContrastPotPin = A0;
+#include <hd44780.h>
+#include <hd44780ioClass/hd44780_I2Cexp.h>
+
+hd44780_I2Cexp lcd;
+constexpr uint8_t kPotPin = A0;
 
 void setup() {
-  lcd.begin(16, 2);
+  Serial.begin(115200);
+
+  const int status = lcd.begin(16, 2);
+  if (status != 0) {
+    // Most common causes: wrong wiring (SDA/SCL swapped), no backpack, bad power.
+    Serial.print(F("LCD begin() failed, status="));
+    Serial.println(status);
+    for (;;) {
+      delay(1000);
+    }
+  }
+
   lcd.print("LCD ready");
 }
 
 void loop() {
-  const int pot = analogRead(kContrastPotPin);
+  const int pot = analogRead(kPotPin);
   lcd.setCursor(0, 1);
   lcd.print("Pot:     ");
   lcd.setCursor(5, 1);

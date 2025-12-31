@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="650" viewBox="0 0 900 650">
+  <style>
+    .bg { fill: #ffffff; }
+    .bb { fill: #f3f4f6; stroke: #111827; stroke-width: 2; }
+    .hole { fill: #ffffff; stroke: #cbd5e1; stroke-width: 1; }
+    .railR { stroke: #ef4444; stroke-width: 3; }
+    .railB { stroke: #3b82f6; stroke-width: 3; }
+    .uno { fill: #0ea5e9; stroke: #0f172a; stroke-width: 2; }
+    .unoHdr { fill: #111827; }
+    .label { font: 700 16px system-ui, -apple-system, Segoe UI, Roboto, Arial; fill: #0f172a; }
+    .text { font: 13px system-ui, -apple-system, Segoe UI, Roboto, Arial; fill: #0f172a; }
+    .pin { font: 12px system-ui, -apple-system, Segoe UI, Roboto, Arial; fill: #0f172a; }
+    .wireR { stroke: #ef4444; stroke-width: 5; fill: none; stroke-linecap: round; }
+    .wireK { stroke: #111827; stroke-width: 5; fill: none; stroke-linecap: round; }
+    .wireG { stroke: #22c55e; stroke-width: 5; fill: none; stroke-linecap: round; }
+    .part { fill: #e5e7eb; stroke: #111827; stroke-width: 2; }
+    .res { fill: #fde68a; stroke: #92400e; stroke-width: 2; }
+    .note { font: 12px system-ui, -apple-system, Segoe UI, Roboto, Arial; fill: #334155; }
+    .legendBox { fill: #ffffff; stroke: #111827; stroke-width: 1.5; }
+    .legendTitle { font: 700 12px system-ui, -apple-system, Segoe UI, Roboto, Arial; fill: #0f172a; }
+    .legendText { font: 12px system-ui, -apple-system, Segoe UI, Roboto, Arial; fill: #334155; }
+    .legendConn { stroke: #94a3b8; stroke-width: 3; fill: none; stroke-linecap: round; }
+    .legendHole { fill: #ffffff; stroke: #94a3b8; stroke-width: 1; }
+    .trench { fill: #ffffff; stroke: #111827; stroke-width: 1.5; opacity: 0.9; }
+  </style>
+
+  <rect class="bg" x="0" y="0" width="900" height="650"/>
+  <text class="label" x="90" y="30">Breadboard view — Photoresistor / LDR (uno-photoresistor)</text>
+
+  <!-- Breadboard -->
+  <rect class="bb" x="70" y="40" width="760" height="260" rx="16"/>
+  <line class="railR" x1="90" y1="70" x2="810" y2="70"/>
+  <line class="railB" x1="90" y1="95" x2="810" y2="95"/>
+  <line class="railR" x1="90" y1="250" x2="810" y2="250"/>
+  <line class="railB" x1="90" y1="275" x2="810" y2="275"/>
+
+  <!-- Center trench (no connection across) -->
+  <rect class="trench" x="448" y="110" width="12" height="130" rx="6"/>
+
+  <!-- Breadboard connectivity legend -->
+  <g>
+    <rect class="legendBox" x="610" y="115" width="200" height="150" rx="10"/>
+    <text class="legendTitle" x="622" y="134">Как соединены отверстия</text>
+    <text class="legendText" x="622" y="152">• Рейки питания —</text>
+    <text class="legendText" x="632" y="166">по горизонтали</text>
+    <text class="legendText" x="622" y="184">• Центр —</text>
+    <text class="legendText" x="632" y="198">по горизонтали 5 шт.</text>
+    <text class="legendText" x="622" y="216">• Через «канавку»</text>
+    <text class="legendText" x="632" y="230">не соединяется</text>
+
+    <circle class="legendHole" cx="742" cy="155" r="3"/>
+    <circle class="legendHole" cx="754" cy="155" r="3"/>
+    <circle class="legendHole" cx="766" cy="155" r="3"/>
+    <circle class="legendHole" cx="778" cy="155" r="3"/>
+    <circle class="legendHole" cx="790" cy="155" r="3"/>
+    <path class="legendConn" d="M 742 155 L 790 155"/>
+
+    <rect class="trench" x="792" y="188" width="8" height="45" rx="4"/>
+    <circle class="legendHole" cx="778" cy="210" r="3"/>
+    <circle class="legendHole" cx="806" cy="210" r="3"/>
+  </g>
+
+  <!-- A few holes for feel -->
+  <g opacity="0.9">
+    <circle class="hole" cx="220" cy="155" r="5"/>
+    <circle class="hole" cx="250" cy="155" r="5"/>
+    <circle class="hole" cx="280" cy="155" r="5"/>
+    <circle class="hole" cx="310" cy="155" r="5"/>
+    <circle class="hole" cx="340" cy="155" r="5"/>
+    <circle class="hole" cx="370" cy="155" r="5"/>
+    <circle class="hole" cx="400" cy="155" r="5"/>
+    <circle class="hole" cx="430" cy="155" r="5"/>
+  </g>
+
+  <!-- Divider parts -->
+  <rect class="part" x="185" y="125" width="110" height="52" rx="10"/>
+  <text class="text" x="198" y="156">LDR</text>
+  <text class="note" x="198" y="173">(photoresistor)</text>
+
+  <rect class="res" x="330" y="140" width="90" height="20" rx="8"/>
+  <text class="note" x="430" y="156">10kΩ</text>
+
+  <circle cx="315" cy="150" r="8" fill="#ffffff" stroke="#0f172a" stroke-width="2"/>
+  <text class="note" x="300" y="120">NODE</text>
+
+  <!-- Arduino -->
+  <rect class="uno" x="140" y="360" width="620" height="240" rx="18"/>
+  <text class="label" x="170" y="395" fill="#0f172a">UNO R3 (simplified)</text>
+
+  <!-- Power header -->
+  <rect class="unoHdr" x="170" y="420" width="560" height="22" rx="6"/>
+  <text class="pin" x="180" y="458">5V</text>
+  <text class="pin" x="230" y="458">GND</text>
+  <text class="pin" x="295" y="458">A0</text>
+
+  <!-- Wires: 5V -> LDR -> node -> A0; node -> 10k -> GND -->
+  <path class="wireR" d="M 190 442 C 190 330, 190 250, 215 165"/>
+  <path class="wireG" d="M 305 442 C 305 335, 315 250, 315 158"/>
+  <path class="wireK" d="M 245 442 C 245 340, 360 250, 360 160"/>
+
+  <!-- short links inside breadboard diagram -->
+  <path class="wireR" d="M 215 165 C 240 152, 265 150, 307 150"/>
+  <path class="wireK" d="M 323 150 C 335 150, 345 150, 330 150"/>
+
+  <text class="note" x="450" y="520">Reads: A0 (voltage divider node). Power: 5V, GND.</text>
+</svg>
