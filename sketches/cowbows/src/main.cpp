@@ -5,6 +5,8 @@
 // - RGB LED (through resistors): R=D11, G=D10, B=D9, common -> GND (common cathode)
 // - Player 1 button: D2 -> button -> GND (uses INPUT_PULLUP)
 // - Player 2 button: D3 -> button -> GND (uses INPUT_PULLUP)
+// - Winner LEDs: P1=D4 -> LED -> GND, P2=D5 -> LED -> GND
+// - Buzzer (piezo): D6 -> buzzer -> GND
 
 #include <Arduino.h>
 
@@ -17,6 +19,7 @@ constexpr uint8_t kBtnP1 = 2;
 constexpr uint8_t kBtnP2 = 3;
 constexpr uint8_t kP1WinLed = 4;
 constexpr uint8_t kP2WinLed = 5;
+constexpr uint8_t kBuzzerPin = 6;
 constexpr shared::PwmPins kRgbPins{.r = 11, .g = 10, .b = 9};
 
 // Set to true if your RGB LED is common-anode (common to +5V).
@@ -72,6 +75,118 @@ void setWinnerLeds(Winner winner) {
 	digitalWrite(kP2WinLed, p2);
 }
 
+struct BeepStep {
+	uint16_t freqHz;  // 0 = silence
+	uint16_t ms;
+};
+
+template <size_t N>
+constexpr uint8_t countOf(const BeepStep (&)[N]) {
+	return static_cast<uint8_t>(N);
+}
+
+// Sound effects (short and simple)
+constexpr BeepStep kSfxPrepare[] = {
+	{880, 50},
+	{0, 40},
+};
+
+constexpr BeepStep kSfxShoot[] = {
+	{1400, 90},
+	{0, 60},
+	{1400, 90},
+};
+
+constexpr BeepStep kSfxFalseStart[] = {
+	{220, 220},
+	{0, 60},
+	{220, 220},
+};
+
+constexpr BeepStep kSfxTie[] = {
+	{600, 120},
+	{0, 60},
+	{600, 120},
+};
+
+constexpr BeepStep kSfxWinP1[] = {
+	{1600, 180},
+	{0, 60},
+	{1900, 180},
+};
+
+constexpr BeepStep kSfxWinP2[] = {
+	{1900, 180},
+	{0, 60},
+	{1600, 180},
+};
+
+struct Buzzer {
+	uint8_t pin;
+	const BeepStep* steps = nullptr;
+	uint8_t stepCount = 0;
+	uint8_t stepIndex = 0;
+	unsigned long stepStartedAt = 0;
+	bool playing = false;
+
+	explicit Buzzer(uint8_t p) : pin(p) {}
+
+	void begin() {
+		shared::setupOutput(pin, LOW);
+		noTone(pin);
+		playing = false;
+		steps = nullptr;
+		stepCount = 0;
+		stepIndex = 0;
+		stepStartedAt = millis();
+	}
+
+	void stop() {
+		noTone(pin);
+		playing = false;
+		steps = nullptr;
+		stepCount = 0;
+		stepIndex = 0;
+	}
+
+	void play(const BeepStep* newSteps, uint8_t newCount) {
+		if (newSteps == nullptr || newCount == 0) {
+			return;
+		}
+		steps = newSteps;
+		stepCount = newCount;
+		stepIndex = 0;
+		stepStartedAt = 0;  // force immediate apply
+		playing = true;
+	}
+
+	void update(unsigned long nowMs) {
+		if (!playing || steps == nullptr || stepIndex >= stepCount) {
+			return;
+		}
+
+		if (stepStartedAt == 0) {
+			stepStartedAt = nowMs;
+			const auto& s = steps[stepIndex];
+			if (s.freqHz == 0) {
+				noTone(pin);
+			} else {
+				tone(pin, s.freqHz);
+			}
+			return;
+		}
+
+		const auto& s = steps[stepIndex];
+		if ((nowMs - stepStartedAt) >= s.ms) {
+			stepIndex++;
+			stepStartedAt = 0;
+			if (stepIndex >= stepCount) {
+				stop();
+			}
+		}
+	}
+};
+
 struct DebouncedButton {
 	uint8_t pin;
 	bool stablePressed = false;
@@ -122,6 +237,7 @@ enum class Phase : uint8_t {
 
 DebouncedButton btn1{kBtnP1};
 DebouncedButton btn2{kBtnP2};
+Buzzer buzzer{kBuzzerPin};
 
 Phase phase = Phase::RoundOver;
 unsigned long phaseStartedAt = 0;
@@ -145,6 +261,7 @@ void toPreparing(unsigned long nowMs) {
 	// random(min, max) is [min, max)
 	prepareDurationMs = static_cast<uint16_t>(random(kPrepareMinMs, kPrepareMaxMs + 1));
 	setRgb(kColorYellow);
+	buzzer.play(kSfxPrepare, countOf(kSfxPrepare));
 	Serial.print(F("PREPARE (yellow), ms="));
 	Serial.println(prepareDurationMs);
 }
@@ -153,15 +270,26 @@ void toShooting(unsigned long nowMs) {
 	phase = Phase::ShootingGreen;
 	phaseStartedAt = nowMs;
 	setRgb(kColorGreen);
+	buzzer.play(kSfxShoot, countOf(kSfxShoot));
 	Serial.println(F("SHOOT (green)!"));
 }
 
 void endRound(unsigned long nowMs, Winner winner, const __FlashStringHelper* reason) {
+	const bool wasShooting = (phase == Phase::ShootingGreen);
 	phase = Phase::RoundOver;
 	phaseStartedAt = nowMs;
 	nextRoundAllowedAt = nowMs + kPostRoundHoldMs;
 	setRgb(kColorRed);
 	setWinnerLeds(winner);
+	if (!wasShooting) {
+		buzzer.play(kSfxFalseStart, countOf(kSfxFalseStart));
+	} else if (winner == Winner::Player1) {
+		buzzer.play(kSfxWinP1, countOf(kSfxWinP1));
+	} else if (winner == Winner::Player2) {
+		buzzer.play(kSfxWinP2, countOf(kSfxWinP2));
+	} else {
+		buzzer.play(kSfxTie, countOf(kSfxTie));
+	}
 	Serial.println(reason);
 	Serial.println(F("Round over. Re-arming..."));
 }
@@ -216,6 +344,7 @@ void setup() {
 
 	btn1.begin();
 	btn2.begin();
+	buzzer.begin();
 
 	// Seed randomness; A0 is usually free in this sketch.
 	randomSeed(analogRead(A0));
@@ -226,6 +355,7 @@ void setup() {
 
 void loop() {
 	const unsigned long nowMs = millis();
+	buzzer.update(nowMs);
 
 	btn1.update(nowMs);
 	btn2.update(nowMs);
